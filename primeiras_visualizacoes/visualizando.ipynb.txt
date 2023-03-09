@@ -1,0 +1,2471 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import plotly.graph_objects as go\n",
+    "\n",
+    "import dash\n",
+    "from dash import dcc, html\n",
+    "\n",
+    "import json\n",
+    "from urllib.request import urlopen\n",
+    "import geojson"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with urlopen('https://github.com/leakyMirror/map-of-europe/blob/master/GeoJSON/europe.geojson?raw=True') as response:\n",
+    "    ccaa = json.load(response)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'ALB'"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "#display(ccaa['features'])\n",
+    "display(ccaa['features'][1]['properties']['ISO3'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Series Name</th>\n",
+       "      <th>Series Code</th>\n",
+       "      <th>Country Name</th>\n",
+       "      <th>Country Code</th>\n",
+       "      <th>1960</th>\n",
+       "      <th>1961</th>\n",
+       "      <th>1962</th>\n",
+       "      <th>1963</th>\n",
+       "      <th>1964</th>\n",
+       "      <th>1965</th>\n",
+       "      <th>...</th>\n",
+       "      <th>2012</th>\n",
+       "      <th>2013</th>\n",
+       "      <th>2014</th>\n",
+       "      <th>2015</th>\n",
+       "      <th>2016</th>\n",
+       "      <th>2017</th>\n",
+       "      <th>2018</th>\n",
+       "      <th>2019</th>\n",
+       "      <th>2020</th>\n",
+       "      <th>2021</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>life_expectancy</td>\n",
+       "      <td>SP.DYN.LE00.IN</td>\n",
+       "      <td>Belgium</td>\n",
+       "      <td>BEL</td>\n",
+       "      <td>69.701951</td>\n",
+       "      <td>70.520976</td>\n",
+       "      <td>70.219512</td>\n",
+       "      <td>70.051463</td>\n",
+       "      <td>70.755122</td>\n",
+       "      <td>70.625366</td>\n",
+       "      <td>...</td>\n",
+       "      <td>80.385366</td>\n",
+       "      <td>80.587805</td>\n",
+       "      <td>81.287805</td>\n",
+       "      <td>80.992683</td>\n",
+       "      <td>81.439024</td>\n",
+       "      <td>81.492683</td>\n",
+       "      <td>81.595122</td>\n",
+       "      <td>81.995122</td>\n",
+       "      <td>80.795122</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>life_expectancy</td>\n",
+       "      <td>SP.DYN.LE00.IN</td>\n",
+       "      <td>Albania</td>\n",
+       "      <td>ALB</td>\n",
+       "      <td>54.439000</td>\n",
+       "      <td>55.634000</td>\n",
+       "      <td>56.671000</td>\n",
+       "      <td>57.844000</td>\n",
+       "      <td>58.983000</td>\n",
+       "      <td>60.019000</td>\n",
+       "      <td>...</td>\n",
+       "      <td>78.064000</td>\n",
+       "      <td>78.123000</td>\n",
+       "      <td>78.407000</td>\n",
+       "      <td>78.644000</td>\n",
+       "      <td>78.860000</td>\n",
+       "      <td>79.047000</td>\n",
+       "      <td>79.184000</td>\n",
+       "      <td>79.282000</td>\n",
+       "      <td>76.989000</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>life_expectancy</td>\n",
+       "      <td>SP.DYN.LE00.IN</td>\n",
+       "      <td>Austria</td>\n",
+       "      <td>AUT</td>\n",
+       "      <td>68.585610</td>\n",
+       "      <td>69.577317</td>\n",
+       "      <td>69.309512</td>\n",
+       "      <td>69.443659</td>\n",
+       "      <td>69.921951</td>\n",
+       "      <td>69.722195</td>\n",
+       "      <td>...</td>\n",
+       "      <td>80.936585</td>\n",
+       "      <td>81.136585</td>\n",
+       "      <td>81.490244</td>\n",
+       "      <td>81.190244</td>\n",
+       "      <td>81.641463</td>\n",
+       "      <td>81.643902</td>\n",
+       "      <td>81.692683</td>\n",
+       "      <td>81.895122</td>\n",
+       "      <td>81.192683</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>life_expectancy</td>\n",
+       "      <td>SP.DYN.LE00.IN</td>\n",
+       "      <td>Belarus</td>\n",
+       "      <td>BLR</td>\n",
+       "      <td>69.254610</td>\n",
+       "      <td>69.738390</td>\n",
+       "      <td>69.462317</td>\n",
+       "      <td>69.709780</td>\n",
+       "      <td>70.619244</td>\n",
+       "      <td>70.597488</td>\n",
+       "      <td>...</td>\n",
+       "      <td>71.965854</td>\n",
+       "      <td>72.470732</td>\n",
+       "      <td>72.970732</td>\n",
+       "      <td>73.624390</td>\n",
+       "      <td>73.826829</td>\n",
+       "      <td>74.129268</td>\n",
+       "      <td>74.175610</td>\n",
+       "      <td>74.226829</td>\n",
+       "      <td>74.226829</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>life_expectancy</td>\n",
+       "      <td>SP.DYN.LE00.IN</td>\n",
+       "      <td>Bulgaria</td>\n",
+       "      <td>BGR</td>\n",
+       "      <td>69.247561</td>\n",
+       "      <td>70.195610</td>\n",
+       "      <td>69.491951</td>\n",
+       "      <td>70.309268</td>\n",
+       "      <td>71.121220</td>\n",
+       "      <td>71.293902</td>\n",
+       "      <td>...</td>\n",
+       "      <td>74.314634</td>\n",
+       "      <td>74.860976</td>\n",
+       "      <td>74.465854</td>\n",
+       "      <td>74.614634</td>\n",
+       "      <td>74.812195</td>\n",
+       "      <td>74.814634</td>\n",
+       "      <td>74.963415</td>\n",
+       "      <td>75.112195</td>\n",
+       "      <td>73.607317</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>863</th>\n",
+       "      <td>inflation</td>\n",
+       "      <td>FP.CPI.TOTL.ZG</td>\n",
+       "      <td>Virgin Islands (U.S.)</td>\n",
+       "      <td>VIR</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>...</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>864</th>\n",
+       "      <td>inflation</td>\n",
+       "      <td>FP.CPI.TOTL.ZG</td>\n",
+       "      <td>West Bank and Gaza</td>\n",
+       "      <td>PSE</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>...</td>\n",
+       "      <td>2.779088</td>\n",
+       "      <td>1.724399</td>\n",
+       "      <td>1.732985</td>\n",
+       "      <td>1.431611</td>\n",
+       "      <td>-0.219107</td>\n",
+       "      <td>0.212571</td>\n",
+       "      <td>-0.195108</td>\n",
+       "      <td>1.580183</td>\n",
+       "      <td>-0.735332</td>\n",
+       "      <td>1.237481</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>865</th>\n",
+       "      <td>inflation,FP.CPI.TOTL.ZG,\"Yemen, Rep.\",YEM,,,,...</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>...</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>866</th>\n",
+       "      <td>inflation</td>\n",
+       "      <td>FP.CPI.TOTL.ZG</td>\n",
+       "      <td>Zambia</td>\n",
+       "      <td>ZMB</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>...</td>\n",
+       "      <td>6.575900</td>\n",
+       "      <td>6.977676</td>\n",
+       "      <td>7.806876</td>\n",
+       "      <td>10.110593</td>\n",
+       "      <td>17.869730</td>\n",
+       "      <td>6.577312</td>\n",
+       "      <td>7.494572</td>\n",
+       "      <td>9.150316</td>\n",
+       "      <td>15.732585</td>\n",
+       "      <td>22.021234</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>867</th>\n",
+       "      <td>inflation</td>\n",
+       "      <td>FP.CPI.TOTL.ZG</td>\n",
+       "      <td>Zimbabwe</td>\n",
+       "      <td>ZWE</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>...</td>\n",
+       "      <td>3.725327</td>\n",
+       "      <td>1.634950</td>\n",
+       "      <td>-0.197785</td>\n",
+       "      <td>-2.430968</td>\n",
+       "      <td>-1.543670</td>\n",
+       "      <td>0.893962</td>\n",
+       "      <td>10.618866</td>\n",
+       "      <td>255.304991</td>\n",
+       "      <td>557.201817</td>\n",
+       "      <td>98.546105</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>868 rows × 66 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                           Series Name     Series Code  \\\n",
+       "0                                      life_expectancy  SP.DYN.LE00.IN   \n",
+       "1                                      life_expectancy  SP.DYN.LE00.IN   \n",
+       "2                                      life_expectancy  SP.DYN.LE00.IN   \n",
+       "3                                      life_expectancy  SP.DYN.LE00.IN   \n",
+       "4                                      life_expectancy  SP.DYN.LE00.IN   \n",
+       "..                                                 ...             ...   \n",
+       "863                                          inflation  FP.CPI.TOTL.ZG   \n",
+       "864                                          inflation  FP.CPI.TOTL.ZG   \n",
+       "865  inflation,FP.CPI.TOTL.ZG,\"Yemen, Rep.\",YEM,,,,...             NaN   \n",
+       "866                                          inflation  FP.CPI.TOTL.ZG   \n",
+       "867                                          inflation  FP.CPI.TOTL.ZG   \n",
+       "\n",
+       "              Country Name Country Code       1960       1961       1962  \\\n",
+       "0                  Belgium          BEL  69.701951  70.520976  70.219512   \n",
+       "1                  Albania          ALB  54.439000  55.634000  56.671000   \n",
+       "2                  Austria          AUT  68.585610  69.577317  69.309512   \n",
+       "3                  Belarus          BLR  69.254610  69.738390  69.462317   \n",
+       "4                 Bulgaria          BGR  69.247561  70.195610  69.491951   \n",
+       "..                     ...          ...        ...        ...        ...   \n",
+       "863  Virgin Islands (U.S.)          VIR        NaN        NaN        NaN   \n",
+       "864     West Bank and Gaza          PSE        NaN        NaN        NaN   \n",
+       "865                    NaN          NaN        NaN        NaN        NaN   \n",
+       "866                 Zambia          ZMB        NaN        NaN        NaN   \n",
+       "867               Zimbabwe          ZWE        NaN        NaN        NaN   \n",
+       "\n",
+       "          1963       1964       1965  ...       2012       2013       2014  \\\n",
+       "0    70.051463  70.755122  70.625366  ...  80.385366  80.587805  81.287805   \n",
+       "1    57.844000  58.983000  60.019000  ...  78.064000  78.123000  78.407000   \n",
+       "2    69.443659  69.921951  69.722195  ...  80.936585  81.136585  81.490244   \n",
+       "3    69.709780  70.619244  70.597488  ...  71.965854  72.470732  72.970732   \n",
+       "4    70.309268  71.121220  71.293902  ...  74.314634  74.860976  74.465854   \n",
+       "..         ...        ...        ...  ...        ...        ...        ...   \n",
+       "863        NaN        NaN        NaN  ...        NaN        NaN        NaN   \n",
+       "864        NaN        NaN        NaN  ...   2.779088   1.724399   1.732985   \n",
+       "865        NaN        NaN        NaN  ...        NaN        NaN        NaN   \n",
+       "866        NaN        NaN        NaN  ...   6.575900   6.977676   7.806876   \n",
+       "867        NaN        NaN        NaN  ...   3.725327   1.634950  -0.197785   \n",
+       "\n",
+       "          2015       2016       2017       2018        2019        2020  \\\n",
+       "0    80.992683  81.439024  81.492683  81.595122   81.995122   80.795122   \n",
+       "1    78.644000  78.860000  79.047000  79.184000   79.282000   76.989000   \n",
+       "2    81.190244  81.641463  81.643902  81.692683   81.895122   81.192683   \n",
+       "3    73.624390  73.826829  74.129268  74.175610   74.226829   74.226829   \n",
+       "4    74.614634  74.812195  74.814634  74.963415   75.112195   73.607317   \n",
+       "..         ...        ...        ...        ...         ...         ...   \n",
+       "863        NaN        NaN        NaN        NaN         NaN         NaN   \n",
+       "864   1.431611  -0.219107   0.212571  -0.195108    1.580183   -0.735332   \n",
+       "865        NaN        NaN        NaN        NaN         NaN         NaN   \n",
+       "866  10.110593  17.869730   6.577312   7.494572    9.150316   15.732585   \n",
+       "867  -2.430968  -1.543670   0.893962  10.618866  255.304991  557.201817   \n",
+       "\n",
+       "          2021  \n",
+       "0          NaN  \n",
+       "1          NaN  \n",
+       "2          NaN  \n",
+       "3          NaN  \n",
+       "4          NaN  \n",
+       "..         ...  \n",
+       "863        NaN  \n",
+       "864   1.237481  \n",
+       "865        NaN  \n",
+       "866  22.021234  \n",
+       "867  98.546105  \n",
+       "\n",
+       "[868 rows x 66 columns]"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "df = pd.read_csv('/workspaces/advanced_visualization/primeiros_testes/dados_paises.csv')\n",
+    "display(df)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.plotly.v1+json": {
+       "config": {
+        "plotlyServerURL": "https://plot.ly"
+       },
+       "data": [
+        {
+         "locations": [
+          "BEL",
+          "ALB",
+          "AUT",
+          "BLR",
+          "BGR",
+          "HRV",
+          "CYP",
+          "DNK",
+          "EST",
+          "CZE",
+          "FIN",
+          "DEU",
+          "GRC",
+          "FRA",
+          "ISL",
+          "HUN",
+          "IRL",
+          "ITA",
+          "LVA",
+          "LTU",
+          "MLT",
+          "MDA",
+          "MNE",
+          "NLD",
+          "NOR",
+          "PRT",
+          "POL",
+          "ROU",
+          "RUS",
+          "AFG",
+          "DZA",
+          "ASM",
+          "AND",
+          "AGO",
+          "ATG",
+          "ARG",
+          "ARM",
+          "ABW",
+          "AUS",
+          "AZE",
+          null,
+          "BHR",
+          "BGD",
+          "BRB",
+          "BLZ",
+          "BEN",
+          "BMU",
+          "BTN",
+          "BOL",
+          "BIH",
+          "BWA",
+          "BRA",
+          "VGB",
+          "BRN",
+          "BFA",
+          "BDI",
+          "CPV",
+          "KHM",
+          "CMR",
+          "CAN",
+          "CYM",
+          "CAF",
+          "TCD",
+          "CHI",
+          "CHL",
+          "CHN",
+          "COL",
+          "COM",
+          null,
+          null,
+          "CRI",
+          "CIV",
+          "CUB",
+          "CUW",
+          "DJI",
+          "DMA",
+          "DOM",
+          "ECU",
+          null,
+          "SLV",
+          "GNQ",
+          "ERI",
+          "SWZ",
+          "ETH",
+          "FRO",
+          "FJI",
+          "PYF",
+          "GAB",
+          null,
+          "GEO",
+          "GHA",
+          "GIB",
+          "GRL",
+          "GRD",
+          "GUM",
+          "GTM",
+          "GIN",
+          "GNB",
+          "GUY",
+          "HTI",
+          "HND",
+          null,
+          "IND",
+          "IDN",
+          null,
+          "IRQ",
+          "IMN",
+          "ISR",
+          "JAM",
+          "JPN",
+          "JOR",
+          "KAZ",
+          "KEN",
+          "KIR",
+          null,
+          null,
+          "XKX",
+          "KWT",
+          "KGZ",
+          "LAO",
+          "LBN",
+          "LSO",
+          "LBR",
+          "LBY",
+          "LIE",
+          "LUX",
+          null,
+          "MDG",
+          "MWI",
+          "MYS",
+          "MDV",
+          "MLI",
+          "MHL",
+          "MRT",
+          "MUS",
+          "MEX",
+          null,
+          "MCO",
+          "MNG",
+          "MAR",
+          "MOZ",
+          "MMR",
+          "NAM",
+          "NRU",
+          "NPL",
+          "NCL",
+          "NZL",
+          "NIC",
+          "NER",
+          "NGA",
+          "MKD",
+          "MNP",
+          "OMN",
+          "PAK",
+          "PLW",
+          "PAN",
+          "PNG",
+          "PRY",
+          "PER",
+          "PHL",
+          "PRI",
+          "QAT",
+          "RWA",
+          "WSM",
+          "SMR",
+          "STP",
+          "SAU",
+          "SEN",
+          "SRB",
+          "SYC",
+          "SLE",
+          "SGP",
+          "SXM",
+          "SVK",
+          "SVN",
+          "SLB",
+          "SOM",
+          "ZAF",
+          "SSD",
+          "ESP",
+          "LKA",
+          "KNA",
+          "LCA",
+          "MAF",
+          "VCT",
+          "SDN",
+          "SUR",
+          "SWE",
+          "CHE",
+          "SYR",
+          "TJK",
+          "TZA",
+          "THA",
+          "TLS",
+          "TGO",
+          "TON",
+          "TTO",
+          "TUN",
+          "TUR",
+          "TKM",
+          "TCA",
+          "TUV",
+          "UGA",
+          "UKR",
+          "ARE",
+          "GBR",
+          "USA",
+          "URY",
+          "UZB",
+          "VUT",
+          null,
+          "VNM",
+          "VIR",
+          "PSE",
+          null,
+          "ZMB",
+          "ZWE",
+          "BEL",
+          "ALB",
+          "AUT",
+          "BLR",
+          "BGR",
+          "HRV",
+          "CYP",
+          "DNK",
+          "EST",
+          "CZE",
+          "FIN",
+          "DEU",
+          "GRC",
+          "FRA",
+          "ISL",
+          "HUN",
+          "IRL",
+          "ITA",
+          "LVA",
+          "LTU",
+          "MLT",
+          "MDA",
+          "MNE",
+          "NLD",
+          "NOR",
+          "PRT",
+          "POL",
+          "ROU",
+          "RUS",
+          "AFG",
+          "DZA",
+          "ASM",
+          "AND",
+          "AGO",
+          "ATG",
+          "ARG",
+          "ARM",
+          "ABW",
+          "AUS",
+          "AZE",
+          null,
+          "BHR",
+          "BGD",
+          "BRB",
+          "BLZ",
+          "BEN",
+          "BMU",
+          "BTN",
+          "BOL",
+          "BIH",
+          "BWA",
+          "BRA",
+          "VGB",
+          "BRN",
+          "BFA",
+          "BDI",
+          "CPV",
+          "KHM",
+          "CMR",
+          "CAN",
+          "CYM",
+          "CAF",
+          "TCD",
+          "CHI",
+          "CHL",
+          "CHN",
+          "COL",
+          "COM",
+          null,
+          null,
+          "CRI",
+          "CIV",
+          "CUB",
+          "CUW",
+          "DJI",
+          "DMA",
+          "DOM",
+          "ECU",
+          null,
+          "SLV",
+          "GNQ",
+          "ERI",
+          "SWZ",
+          "ETH",
+          "FRO",
+          "FJI",
+          "PYF",
+          "GAB",
+          null,
+          "GEO",
+          "GHA",
+          "GIB",
+          "GRL",
+          "GRD",
+          "GUM",
+          "GTM",
+          "GIN",
+          "GNB",
+          "GUY",
+          "HTI",
+          "HND",
+          null,
+          "IND",
+          "IDN",
+          null,
+          "IRQ",
+          "IMN",
+          "ISR",
+          "JAM",
+          "JPN",
+          "JOR",
+          "KAZ",
+          "KEN",
+          "KIR",
+          null,
+          null,
+          "XKX",
+          "KWT",
+          "KGZ",
+          "LAO",
+          "LBN",
+          "LSO",
+          "LBR",
+          "LBY",
+          "LIE",
+          "LUX",
+          null,
+          "MDG",
+          "MWI",
+          "MYS",
+          "MDV",
+          "MLI",
+          "MHL",
+          "MRT",
+          "MUS",
+          "MEX",
+          null,
+          "MCO",
+          "MNG",
+          "MAR",
+          "MOZ",
+          "MMR",
+          "NAM",
+          "NRU",
+          "NPL",
+          "NCL",
+          "NZL",
+          "NIC",
+          "NER",
+          "NGA",
+          "MKD",
+          "MNP",
+          "OMN",
+          "PAK",
+          "PLW",
+          "PAN",
+          "PNG",
+          "PRY",
+          "PER",
+          "PHL",
+          "PRI",
+          "QAT",
+          "RWA",
+          "WSM",
+          "SMR",
+          "STP",
+          "SAU",
+          "SEN",
+          "SRB",
+          "SYC",
+          "SLE",
+          "SGP",
+          "SXM",
+          "SVK",
+          "SVN",
+          "SLB",
+          "SOM",
+          "ZAF",
+          "SSD",
+          "ESP",
+          "LKA",
+          "KNA",
+          "LCA",
+          "MAF",
+          "VCT",
+          "SDN",
+          "SUR",
+          "SWE",
+          "CHE",
+          "SYR",
+          "TJK",
+          "TZA",
+          "THA",
+          "TLS",
+          "TGO",
+          "TON",
+          "TTO",
+          "TUN",
+          "TUR",
+          "TKM",
+          "TCA",
+          "TUV",
+          "UGA",
+          "UKR",
+          "ARE",
+          "GBR",
+          "USA",
+          "URY",
+          "UZB",
+          "VUT",
+          null,
+          "VNM",
+          "VIR",
+          "PSE",
+          null,
+          "ZMB",
+          "ZWE",
+          "BEL",
+          "ALB",
+          "AUT",
+          "BLR",
+          "BGR",
+          "HRV",
+          "CYP",
+          "DNK",
+          "EST",
+          "CZE",
+          "FIN",
+          "DEU",
+          "GRC",
+          "FRA",
+          "ISL",
+          "HUN",
+          "IRL",
+          "ITA",
+          "LVA",
+          "LTU",
+          "MLT",
+          "MDA",
+          "MNE",
+          "NLD",
+          "NOR",
+          "PRT",
+          "POL",
+          "ROU",
+          "RUS",
+          "AFG",
+          "DZA",
+          "ASM",
+          "AND",
+          "AGO",
+          "ATG",
+          "ARG",
+          "ARM",
+          "ABW",
+          "AUS",
+          "AZE",
+          null,
+          "BHR",
+          "BGD",
+          "BRB",
+          "BLZ",
+          "BEN",
+          "BMU",
+          "BTN",
+          "BOL",
+          "BIH",
+          "BWA",
+          "BRA",
+          "VGB",
+          "BRN",
+          "BFA",
+          "BDI",
+          "CPV",
+          "KHM",
+          "CMR",
+          "CAN",
+          "CYM",
+          "CAF",
+          "TCD",
+          "CHI",
+          "CHL",
+          "CHN",
+          "COL",
+          "COM",
+          null,
+          null,
+          "CRI",
+          "CIV",
+          "CUB",
+          "CUW",
+          "DJI",
+          "DMA",
+          "DOM",
+          "ECU",
+          null,
+          "SLV",
+          "GNQ",
+          "ERI",
+          "SWZ",
+          "ETH",
+          "FRO",
+          "FJI",
+          "PYF",
+          "GAB",
+          null,
+          "GEO",
+          "GHA",
+          "GIB",
+          "GRL",
+          "GRD",
+          "GUM",
+          "GTM",
+          "GIN",
+          "GNB",
+          "GUY",
+          "HTI",
+          "HND",
+          null,
+          "IND",
+          "IDN",
+          null,
+          "IRQ",
+          "IMN",
+          "ISR",
+          "JAM",
+          "JPN",
+          "JOR",
+          "KAZ",
+          "KEN",
+          "KIR",
+          null,
+          null,
+          "XKX",
+          "KWT",
+          "KGZ",
+          "LAO",
+          "LBN",
+          "LSO",
+          "LBR",
+          "LBY",
+          "LIE",
+          "LUX",
+          null,
+          "MDG",
+          "MWI",
+          "MYS",
+          "MDV",
+          "MLI",
+          "MHL",
+          "MRT",
+          "MUS",
+          "MEX",
+          null,
+          "MCO",
+          "MNG",
+          "MAR",
+          "MOZ",
+          "MMR",
+          "NAM",
+          "NRU",
+          "NPL",
+          "NCL",
+          "NZL",
+          "NIC",
+          "NER",
+          "NGA",
+          "MKD",
+          "MNP",
+          "OMN",
+          "PAK",
+          "PLW",
+          "PAN",
+          "PNG",
+          "PRY",
+          "PER",
+          "PHL",
+          "PRI",
+          "QAT",
+          "RWA",
+          "WSM",
+          "SMR",
+          "STP",
+          "SAU",
+          "SEN",
+          "SRB",
+          "SYC",
+          "SLE",
+          "SGP",
+          "SXM",
+          "SVK",
+          "SVN",
+          "SLB",
+          "SOM",
+          "ZAF",
+          "SSD",
+          "ESP",
+          "LKA",
+          "KNA",
+          "LCA",
+          "MAF",
+          "VCT",
+          "SDN",
+          "SUR",
+          "SWE",
+          "CHE",
+          "SYR",
+          "TJK",
+          "TZA",
+          "THA",
+          "TLS",
+          "TGO",
+          "TON",
+          "TTO",
+          "TUN",
+          "TUR",
+          "TKM",
+          "TCA",
+          "TUV",
+          "UGA",
+          "UKR",
+          "ARE",
+          "GBR",
+          "USA",
+          "URY",
+          "UZB",
+          "VUT",
+          null,
+          "VNM",
+          "VIR",
+          "PSE",
+          null,
+          "ZMB",
+          "ZWE",
+          "BEL",
+          "ALB",
+          "AUT",
+          "BLR",
+          "BGR",
+          "HRV",
+          "CYP",
+          "DNK",
+          "EST",
+          "CZE",
+          "FIN",
+          "DEU",
+          "GRC",
+          "FRA",
+          "ISL",
+          "HUN",
+          "IRL",
+          "ITA",
+          "LVA",
+          "LTU",
+          "MLT",
+          "MDA",
+          "MNE",
+          "NLD",
+          "NOR",
+          "PRT",
+          "POL",
+          "ROU",
+          "RUS",
+          "AFG",
+          "DZA",
+          "ASM",
+          "AND",
+          "AGO",
+          "ATG",
+          "ARG",
+          "ARM",
+          "ABW",
+          "AUS",
+          "AZE",
+          null,
+          "BHR",
+          "BGD",
+          "BRB",
+          "BLZ",
+          "BEN",
+          "BMU",
+          "BTN",
+          "BOL",
+          "BIH",
+          "BWA",
+          "BRA",
+          "VGB",
+          "BRN",
+          "BFA",
+          "BDI",
+          "CPV",
+          "KHM",
+          "CMR",
+          "CAN",
+          "CYM",
+          "CAF",
+          "TCD",
+          "CHI",
+          "CHL",
+          "CHN",
+          "COL",
+          "COM",
+          null,
+          null,
+          "CRI",
+          "CIV",
+          "CUB",
+          "CUW",
+          "DJI",
+          "DMA",
+          "DOM",
+          "ECU",
+          null,
+          "SLV",
+          "GNQ",
+          "ERI",
+          "SWZ",
+          "ETH",
+          "FRO",
+          "FJI",
+          "PYF",
+          "GAB",
+          null,
+          "GEO",
+          "GHA",
+          "GIB",
+          "GRL",
+          "GRD",
+          "GUM",
+          "GTM",
+          "GIN",
+          "GNB",
+          "GUY",
+          "HTI",
+          "HND",
+          null,
+          "IND",
+          "IDN",
+          null,
+          "IRQ",
+          "IMN",
+          "ISR",
+          "JAM",
+          "JPN",
+          "JOR",
+          "KAZ",
+          "KEN",
+          "KIR",
+          null,
+          null,
+          "XKX",
+          "KWT",
+          "KGZ",
+          "LAO",
+          "LBN",
+          "LSO",
+          "LBR",
+          "LBY",
+          "LIE",
+          "LUX",
+          null,
+          "MDG",
+          "MWI",
+          "MYS",
+          "MDV",
+          "MLI",
+          "MHL",
+          "MRT",
+          "MUS",
+          "MEX",
+          null,
+          "MCO",
+          "MNG",
+          "MAR",
+          "MOZ",
+          "MMR",
+          "NAM",
+          "NRU",
+          "NPL",
+          "NCL",
+          "NZL",
+          "NIC",
+          "NER",
+          "NGA",
+          "MKD",
+          "MNP",
+          "OMN",
+          "PAK",
+          "PLW",
+          "PAN",
+          "PNG",
+          "PRY",
+          "PER",
+          "PHL",
+          "PRI",
+          "QAT",
+          "RWA",
+          "WSM",
+          "SMR",
+          "STP",
+          "SAU",
+          "SEN",
+          "SRB",
+          "SYC",
+          "SLE",
+          "SGP",
+          "SXM",
+          "SVK",
+          "SVN",
+          "SLB",
+          "SOM",
+          "ZAF",
+          "SSD",
+          "ESP",
+          "LKA",
+          "KNA",
+          "LCA",
+          "MAF",
+          "VCT",
+          "SDN",
+          "SUR",
+          "SWE",
+          "CHE",
+          "SYR",
+          "TJK",
+          "TZA",
+          "THA",
+          "TLS",
+          "TGO",
+          "TON",
+          "TTO",
+          "TUN",
+          "TUR",
+          "TKM",
+          "TCA",
+          "TUV",
+          "UGA",
+          "UKR",
+          "ARE",
+          "GBR",
+          "USA",
+          "URY",
+          "UZB",
+          "VUT",
+          null,
+          "VNM",
+          "VIR",
+          "PSE",
+          null,
+          "ZMB",
+          "ZWE"
+         ],
+         "type": "choropleth",
+         "z": [
+          1.46796699090272,
+          7.79321853789215,
+          2.24336631500904,
+          709.346032118606,
+          62.0548336837993,
+          3.95010395010403,
+          2.61581787956337,
+          2.0836084238285,
+          28.7766137208514,
+          8.99052361478446,
+          0.791239406938448,
+          1.70616052419454,
+          8.93451415961518,
+          1.79648142095595,
+          1.65123150116651,
+          28.3054683706654,
+          2.52486728005296,
+          5.23542258044299,
+          24.975935531675,
+          39.647629032829,
+          4.42664550286656,
+          29.8656104095718,
+          null,
+          1.92322003453521,
+          2.46036778693723,
+          4.22281614099486,
+          27.951388563304,
+          32.2424847257597,
+          197.414268084251,
+          null,
+          29.7796264864999,
+          null,
+          null,
+          2666.45059288538,
+          null,
+          null,
+          175.951325534583,
+          3.36139107320895,
+          4.62776659959758,
+          411.759641777268,
+          2.70403475064702,
+          10.2978117947205,
+          1.87886279357232,
+          2.8896158437215,
+          14.4625482180894,
+          null,
+          9.48754836789363,
+          10.1932067630746,
+          null,
+          10.512546081579,
+          66.0070335542481,
+          null,
+          5.96664139499613,
+          7.45884497828323,
+          19.2632536382538,
+          8.35152497972926,
+          -0.798944337811886,
+          9.06969071921507,
+          2.14876033057852,
+          null,
+          19.1894039735098,
+          9.23032599768658,
+          null,
+          8.23263034116112,
+          16.7912251650917,
+          20.8917930194849,
+          null,
+          23.1864981102567,
+          14.2950690851945,
+          null,
+          null,
+          null,
+          1.31753745774971,
+          12.5359594558963,
+          22.8861330326945,
+          10.0296564501018,
+          19.8724349483472,
+          null,
+          12.2885912601426,
+          10.0221733553239,
+          null,
+          2.16564721441536,
+          null,
+          9.64653104079614,
+          162.717152150377,
+          59.4615536991446,
+          null,
+          null,
+          1.86882475298978,
+          null,
+          8.41141312270567,
+          null,
+          45.3653083621856,
+          12.2105263157894,
+          27.6081851727601,
+          29.4645292281585,
+          10.2248861637545,
+          9.42032321644617,
+          387.310847766638,
+          null,
+          9.9402588781945,
+          19.9087488364168,
+          -0.127899045020497,
+          2.35312451301272,
+          176.15529894237,
+          1.55432816055007,
+          null,
+          null,
+          2.68672756582486,
+          null,
+          19.5939189878584,
+          null,
+          9.27083333333323,
+          null,
+          7.2379849449913,
+          null,
+          1.86769424969108,
+          49.0802100590784,
+          83.3257747543458,
+          3.45057509584896,
+          5.48886133171505,
+          13.4417696811973,
+          null,
+          6.5437906852417,
+          6.02933188484532,
+          34.9992712889592,
+          null,
+          0.0435161009571708,
+          6.12358164775524,
+          null,
+          25.1947123972847,
+          null,
+          null,
+          7.62296950698166,
+          null,
+          3.75494413677554,
+          null,
+          10.5632886691814,
+          72.8355022972637,
+          16.3735889723568,
+          null,
+          null,
+          12.3435785170513,
+          null,
+          0.994206982933863,
+          17.280932681459,
+          13.4254143646407,
+          11.1287029707088,
+          6.83199610989531,
+          null,
+          2.9565217391303,
+          null,
+          -2.90352865746141,
+          null,
+          null,
+          4.86843103056034,
+          7.86400784570113,
+          82.6605151864663,
+          -0.243902439024446,
+          null,
+          1.72053384788524,
+          null,
+          9.84109579837757,
+          13.4637296178669,
+          9.6292197011623,
+          null,
+          8.6804442262446,
+          null,
+          4.67380337624704,
+          7.6748487344981,
+          2.95680025092623,
+          5.62965921512373,
+          null,
+          1.73837289880567,
+          68.3751929485423,
+          235.558815073605,
+          2.45514857818396,
+          1.79982776867147,
+          7.97995780590684,
+          null,
+          27.4277854195323,
+          5.81818181818193,
+          null,
+          16.4335034524163,
+          1.4600063035097,
+          5.18220539517273,
+          6.24415028747145,
+          89.1133172248499,
+          null,
+          null,
+          null,
+          6.55014018970372,
+          376.746174768209,
+          null,
+          2.69749518304432,
+          2.80541968853655,
+          42.2483197983755,
+          null,
+          2.22970130416486,
+          null,
+          null,
+          null,
+          34.9295874166667,
+          null
+         ]
+        }
+       ],
+       "layout": {
+        "geo": {
+         "countrycolor": "Black",
+         "lataxis": {
+          "showgrid": true
+         },
+         "lonaxis": {
+          "showgrid": true
+         },
+         "resolution": 50,
+         "scope": "europe",
+         "showcountries": true,
+         "visible": false
+        },
+        "margin": {
+         "b": 0,
+         "l": 0,
+         "r": 0,
+         "t": 0
+        },
+        "template": {
+         "data": {
+          "bar": [
+           {
+            "error_x": {
+             "color": "#2a3f5f"
+            },
+            "error_y": {
+             "color": "#2a3f5f"
+            },
+            "marker": {
+             "line": {
+              "color": "#E5ECF6",
+              "width": 0.5
+             },
+             "pattern": {
+              "fillmode": "overlay",
+              "size": 10,
+              "solidity": 0.2
+             }
+            },
+            "type": "bar"
+           }
+          ],
+          "barpolar": [
+           {
+            "marker": {
+             "line": {
+              "color": "#E5ECF6",
+              "width": 0.5
+             },
+             "pattern": {
+              "fillmode": "overlay",
+              "size": 10,
+              "solidity": 0.2
+             }
+            },
+            "type": "barpolar"
+           }
+          ],
+          "carpet": [
+           {
+            "aaxis": {
+             "endlinecolor": "#2a3f5f",
+             "gridcolor": "white",
+             "linecolor": "white",
+             "minorgridcolor": "white",
+             "startlinecolor": "#2a3f5f"
+            },
+            "baxis": {
+             "endlinecolor": "#2a3f5f",
+             "gridcolor": "white",
+             "linecolor": "white",
+             "minorgridcolor": "white",
+             "startlinecolor": "#2a3f5f"
+            },
+            "type": "carpet"
+           }
+          ],
+          "choropleth": [
+           {
+            "colorbar": {
+             "outlinewidth": 0,
+             "ticks": ""
+            },
+            "type": "choropleth"
+           }
+          ],
+          "contour": [
+           {
+            "colorbar": {
+             "outlinewidth": 0,
+             "ticks": ""
+            },
+            "colorscale": [
+             [
+              0,
+              "#0d0887"
+             ],
+             [
+              0.1111111111111111,
+              "#46039f"
+             ],
+             [
+              0.2222222222222222,
+              "#7201a8"
+             ],
+             [
+              0.3333333333333333,
+              "#9c179e"
+             ],
+             [
+              0.4444444444444444,
+              "#bd3786"
+             ],
+             [
+              0.5555555555555556,
+              "#d8576b"
+             ],
+             [
+              0.6666666666666666,
+              "#ed7953"
+             ],
+             [
+              0.7777777777777778,
+              "#fb9f3a"
+             ],
+             [
+              0.8888888888888888,
+              "#fdca26"
+             ],
+             [
+              1,
+              "#f0f921"
+             ]
+            ],
+            "type": "contour"
+           }
+          ],
+          "contourcarpet": [
+           {
+            "colorbar": {
+             "outlinewidth": 0,
+             "ticks": ""
+            },
+            "type": "contourcarpet"
+           }
+          ],
+          "heatmap": [
+           {
+            "colorbar": {
+             "outlinewidth": 0,
+             "ticks": ""
+            },
+            "colorscale": [
+             [
+              0,
+              "#0d0887"
+             ],
+             [
+              0.1111111111111111,
+              "#46039f"
+             ],
+             [
+              0.2222222222222222,
+              "#7201a8"
+             ],
+             [
+              0.3333333333333333,
+              "#9c179e"
+             ],
+             [
+              0.4444444444444444,
+              "#bd3786"
+             ],
+             [
+              0.5555555555555556,
+              "#d8576b"
+             ],
+             [
+              0.6666666666666666,
+              "#ed7953"
+             ],
+             [
+              0.7777777777777778,
+              "#fb9f3a"
+             ],
+             [
+              0.8888888888888888,
+              "#fdca26"
+             ],
+             [
+              1,
+              "#f0f921"
+             ]
+            ],
+            "type": "heatmap"
+           }
+          ],
+          "heatmapgl": [
+           {
+            "colorbar": {
+             "outlinewidth": 0,
+             "ticks": ""
+            },
+            "colorscale": [
+             [
+              0,
+              "#0d0887"
+             ],
+             [
+              0.1111111111111111,
+              "#46039f"
+             ],
+             [
+              0.2222222222222222,
+              "#7201a8"
+             ],
+             [
+              0.3333333333333333,
+              "#9c179e"
+             ],
+             [
+              0.4444444444444444,
+              "#bd3786"
+             ],
+             [
+              0.5555555555555556,
+              "#d8576b"
+             ],
+             [
+              0.6666666666666666,
+              "#ed7953"
+             ],
+             [
+              0.7777777777777778,
+              "#fb9f3a"
+             ],
+             [
+              0.8888888888888888,
+              "#fdca26"
+             ],
+             [
+              1,
+              "#f0f921"
+             ]
+            ],
+            "type": "heatmapgl"
+           }
+          ],
+          "histogram": [
+           {
+            "marker": {
+             "pattern": {
+              "fillmode": "overlay",
+              "size": 10,
+              "solidity": 0.2
+             }
+            },
+            "type": "histogram"
+           }
+          ],
+          "histogram2d": [
+           {
+            "colorbar": {
+             "outlinewidth": 0,
+             "ticks": ""
+            },
+            "colorscale": [
+             [
+              0,
+              "#0d0887"
+             ],
+             [
+              0.1111111111111111,
+              "#46039f"
+             ],
+             [
+              0.2222222222222222,
+              "#7201a8"
+             ],
+             [
+              0.3333333333333333,
+              "#9c179e"
+             ],
+             [
+              0.4444444444444444,
+              "#bd3786"
+             ],
+             [
+              0.5555555555555556,
+              "#d8576b"
+             ],
+             [
+              0.6666666666666666,
+              "#ed7953"
+             ],
+             [
+              0.7777777777777778,
+              "#fb9f3a"
+             ],
+             [
+              0.8888888888888888,
+              "#fdca26"
+             ],
+             [
+              1,
+              "#f0f921"
+             ]
+            ],
+            "type": "histogram2d"
+           }
+          ],
+          "histogram2dcontour": [
+           {
+            "colorbar": {
+             "outlinewidth": 0,
+             "ticks": ""
+            },
+            "colorscale": [
+             [
+              0,
+              "#0d0887"
+             ],
+             [
+              0.1111111111111111,
+              "#46039f"
+             ],
+             [
+              0.2222222222222222,
+              "#7201a8"
+             ],
+             [
+              0.3333333333333333,
+              "#9c179e"
+             ],
+             [
+              0.4444444444444444,
+              "#bd3786"
+             ],
+             [
+              0.5555555555555556,
+              "#d8576b"
+             ],
+             [
+              0.6666666666666666,
+              "#ed7953"
+             ],
+             [
+              0.7777777777777778,
+              "#fb9f3a"
+             ],
+             [
+              0.8888888888888888,
+              "#fdca26"
+             ],
+             [
+              1,
+              "#f0f921"
+             ]
+            ],
+            "type": "histogram2dcontour"
+           }
+          ],
+          "mesh3d": [
+           {
+            "colorbar": {
+             "outlinewidth": 0,
+             "ticks": ""
+            },
+            "type": "mesh3d"
+           }
+          ],
+          "parcoords": [
+           {
+            "line": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "type": "parcoords"
+           }
+          ],
+          "pie": [
+           {
+            "automargin": true,
+            "type": "pie"
+           }
+          ],
+          "scatter": [
+           {
+            "fillpattern": {
+             "fillmode": "overlay",
+             "size": 10,
+             "solidity": 0.2
+            },
+            "type": "scatter"
+           }
+          ],
+          "scatter3d": [
+           {
+            "line": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "marker": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "type": "scatter3d"
+           }
+          ],
+          "scattercarpet": [
+           {
+            "marker": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "type": "scattercarpet"
+           }
+          ],
+          "scattergeo": [
+           {
+            "marker": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "type": "scattergeo"
+           }
+          ],
+          "scattergl": [
+           {
+            "marker": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "type": "scattergl"
+           }
+          ],
+          "scattermapbox": [
+           {
+            "marker": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "type": "scattermapbox"
+           }
+          ],
+          "scatterpolar": [
+           {
+            "marker": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "type": "scatterpolar"
+           }
+          ],
+          "scatterpolargl": [
+           {
+            "marker": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "type": "scatterpolargl"
+           }
+          ],
+          "scatterternary": [
+           {
+            "marker": {
+             "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+             }
+            },
+            "type": "scatterternary"
+           }
+          ],
+          "surface": [
+           {
+            "colorbar": {
+             "outlinewidth": 0,
+             "ticks": ""
+            },
+            "colorscale": [
+             [
+              0,
+              "#0d0887"
+             ],
+             [
+              0.1111111111111111,
+              "#46039f"
+             ],
+             [
+              0.2222222222222222,
+              "#7201a8"
+             ],
+             [
+              0.3333333333333333,
+              "#9c179e"
+             ],
+             [
+              0.4444444444444444,
+              "#bd3786"
+             ],
+             [
+              0.5555555555555556,
+              "#d8576b"
+             ],
+             [
+              0.6666666666666666,
+              "#ed7953"
+             ],
+             [
+              0.7777777777777778,
+              "#fb9f3a"
+             ],
+             [
+              0.8888888888888888,
+              "#fdca26"
+             ],
+             [
+              1,
+              "#f0f921"
+             ]
+            ],
+            "type": "surface"
+           }
+          ],
+          "table": [
+           {
+            "cells": {
+             "fill": {
+              "color": "#EBF0F8"
+             },
+             "line": {
+              "color": "white"
+             }
+            },
+            "header": {
+             "fill": {
+              "color": "#C8D4E3"
+             },
+             "line": {
+              "color": "white"
+             }
+            },
+            "type": "table"
+           }
+          ]
+         },
+         "layout": {
+          "annotationdefaults": {
+           "arrowcolor": "#2a3f5f",
+           "arrowhead": 0,
+           "arrowwidth": 1
+          },
+          "autotypenumbers": "strict",
+          "coloraxis": {
+           "colorbar": {
+            "outlinewidth": 0,
+            "ticks": ""
+           }
+          },
+          "colorscale": {
+           "diverging": [
+            [
+             0,
+             "#8e0152"
+            ],
+            [
+             0.1,
+             "#c51b7d"
+            ],
+            [
+             0.2,
+             "#de77ae"
+            ],
+            [
+             0.3,
+             "#f1b6da"
+            ],
+            [
+             0.4,
+             "#fde0ef"
+            ],
+            [
+             0.5,
+             "#f7f7f7"
+            ],
+            [
+             0.6,
+             "#e6f5d0"
+            ],
+            [
+             0.7,
+             "#b8e186"
+            ],
+            [
+             0.8,
+             "#7fbc41"
+            ],
+            [
+             0.9,
+             "#4d9221"
+            ],
+            [
+             1,
+             "#276419"
+            ]
+           ],
+           "sequential": [
+            [
+             0,
+             "#0d0887"
+            ],
+            [
+             0.1111111111111111,
+             "#46039f"
+            ],
+            [
+             0.2222222222222222,
+             "#7201a8"
+            ],
+            [
+             0.3333333333333333,
+             "#9c179e"
+            ],
+            [
+             0.4444444444444444,
+             "#bd3786"
+            ],
+            [
+             0.5555555555555556,
+             "#d8576b"
+            ],
+            [
+             0.6666666666666666,
+             "#ed7953"
+            ],
+            [
+             0.7777777777777778,
+             "#fb9f3a"
+            ],
+            [
+             0.8888888888888888,
+             "#fdca26"
+            ],
+            [
+             1,
+             "#f0f921"
+            ]
+           ],
+           "sequentialminus": [
+            [
+             0,
+             "#0d0887"
+            ],
+            [
+             0.1111111111111111,
+             "#46039f"
+            ],
+            [
+             0.2222222222222222,
+             "#7201a8"
+            ],
+            [
+             0.3333333333333333,
+             "#9c179e"
+            ],
+            [
+             0.4444444444444444,
+             "#bd3786"
+            ],
+            [
+             0.5555555555555556,
+             "#d8576b"
+            ],
+            [
+             0.6666666666666666,
+             "#ed7953"
+            ],
+            [
+             0.7777777777777778,
+             "#fb9f3a"
+            ],
+            [
+             0.8888888888888888,
+             "#fdca26"
+            ],
+            [
+             1,
+             "#f0f921"
+            ]
+           ]
+          },
+          "colorway": [
+           "#636efa",
+           "#EF553B",
+           "#00cc96",
+           "#ab63fa",
+           "#FFA15A",
+           "#19d3f3",
+           "#FF6692",
+           "#B6E880",
+           "#FF97FF",
+           "#FECB52"
+          ],
+          "font": {
+           "color": "#2a3f5f"
+          },
+          "geo": {
+           "bgcolor": "white",
+           "lakecolor": "white",
+           "landcolor": "#E5ECF6",
+           "showlakes": true,
+           "showland": true,
+           "subunitcolor": "white"
+          },
+          "hoverlabel": {
+           "align": "left"
+          },
+          "hovermode": "closest",
+          "mapbox": {
+           "style": "light"
+          },
+          "paper_bgcolor": "white",
+          "plot_bgcolor": "#E5ECF6",
+          "polar": {
+           "angularaxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+           },
+           "bgcolor": "#E5ECF6",
+           "radialaxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+           }
+          },
+          "scene": {
+           "xaxis": {
+            "backgroundcolor": "#E5ECF6",
+            "gridcolor": "white",
+            "gridwidth": 2,
+            "linecolor": "white",
+            "showbackground": true,
+            "ticks": "",
+            "zerolinecolor": "white"
+           },
+           "yaxis": {
+            "backgroundcolor": "#E5ECF6",
+            "gridcolor": "white",
+            "gridwidth": 2,
+            "linecolor": "white",
+            "showbackground": true,
+            "ticks": "",
+            "zerolinecolor": "white"
+           },
+           "zaxis": {
+            "backgroundcolor": "#E5ECF6",
+            "gridcolor": "white",
+            "gridwidth": 2,
+            "linecolor": "white",
+            "showbackground": true,
+            "ticks": "",
+            "zerolinecolor": "white"
+           }
+          },
+          "shapedefaults": {
+           "line": {
+            "color": "#2a3f5f"
+           }
+          },
+          "ternary": {
+           "aaxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+           },
+           "baxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+           },
+           "bgcolor": "#E5ECF6",
+           "caxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+           }
+          },
+          "title": {
+           "x": 0.05
+          },
+          "xaxis": {
+           "automargin": true,
+           "gridcolor": "white",
+           "linecolor": "white",
+           "ticks": "",
+           "title": {
+            "standoff": 15
+           },
+           "zerolinecolor": "white",
+           "zerolinewidth": 2
+          },
+          "yaxis": {
+           "automargin": true,
+           "gridcolor": "white",
+           "linecolor": "white",
+           "ticks": "",
+           "title": {
+            "standoff": 15
+           },
+           "zerolinecolor": "white",
+           "zerolinewidth": 2
+          }
+         }
+        }
+       }
+      },
+      "text/html": [
+       "<div>                            <div id=\"5a401e6f-bb17-4c50-8516-edc263762c6f\" class=\"plotly-graph-div\" style=\"height:525px; width:100%;\"></div>            <script type=\"text/javascript\">                require([\"plotly\"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById(\"5a401e6f-bb17-4c50-8516-edc263762c6f\")) {                    Plotly.newPlot(                        \"5a401e6f-bb17-4c50-8516-edc263762c6f\",                        [{\"locations\":[\"BEL\",\"ALB\",\"AUT\",\"BLR\",\"BGR\",\"HRV\",\"CYP\",\"DNK\",\"EST\",\"CZE\",\"FIN\",\"DEU\",\"GRC\",\"FRA\",\"ISL\",\"HUN\",\"IRL\",\"ITA\",\"LVA\",\"LTU\",\"MLT\",\"MDA\",\"MNE\",\"NLD\",\"NOR\",\"PRT\",\"POL\",\"ROU\",\"RUS\",\"AFG\",\"DZA\",\"ASM\",\"AND\",\"AGO\",\"ATG\",\"ARG\",\"ARM\",\"ABW\",\"AUS\",\"AZE\",null,\"BHR\",\"BGD\",\"BRB\",\"BLZ\",\"BEN\",\"BMU\",\"BTN\",\"BOL\",\"BIH\",\"BWA\",\"BRA\",\"VGB\",\"BRN\",\"BFA\",\"BDI\",\"CPV\",\"KHM\",\"CMR\",\"CAN\",\"CYM\",\"CAF\",\"TCD\",\"CHI\",\"CHL\",\"CHN\",\"COL\",\"COM\",null,null,\"CRI\",\"CIV\",\"CUB\",\"CUW\",\"DJI\",\"DMA\",\"DOM\",\"ECU\",null,\"SLV\",\"GNQ\",\"ERI\",\"SWZ\",\"ETH\",\"FRO\",\"FJI\",\"PYF\",\"GAB\",null,\"GEO\",\"GHA\",\"GIB\",\"GRL\",\"GRD\",\"GUM\",\"GTM\",\"GIN\",\"GNB\",\"GUY\",\"HTI\",\"HND\",null,\"IND\",\"IDN\",null,\"IRQ\",\"IMN\",\"ISR\",\"JAM\",\"JPN\",\"JOR\",\"KAZ\",\"KEN\",\"KIR\",null,null,\"XKX\",\"KWT\",\"KGZ\",\"LAO\",\"LBN\",\"LSO\",\"LBR\",\"LBY\",\"LIE\",\"LUX\",null,\"MDG\",\"MWI\",\"MYS\",\"MDV\",\"MLI\",\"MHL\",\"MRT\",\"MUS\",\"MEX\",null,\"MCO\",\"MNG\",\"MAR\",\"MOZ\",\"MMR\",\"NAM\",\"NRU\",\"NPL\",\"NCL\",\"NZL\",\"NIC\",\"NER\",\"NGA\",\"MKD\",\"MNP\",\"OMN\",\"PAK\",\"PLW\",\"PAN\",\"PNG\",\"PRY\",\"PER\",\"PHL\",\"PRI\",\"QAT\",\"RWA\",\"WSM\",\"SMR\",\"STP\",\"SAU\",\"SEN\",\"SRB\",\"SYC\",\"SLE\",\"SGP\",\"SXM\",\"SVK\",\"SVN\",\"SLB\",\"SOM\",\"ZAF\",\"SSD\",\"ESP\",\"LKA\",\"KNA\",\"LCA\",\"MAF\",\"VCT\",\"SDN\",\"SUR\",\"SWE\",\"CHE\",\"SYR\",\"TJK\",\"TZA\",\"THA\",\"TLS\",\"TGO\",\"TON\",\"TTO\",\"TUN\",\"TUR\",\"TKM\",\"TCA\",\"TUV\",\"UGA\",\"UKR\",\"ARE\",\"GBR\",\"USA\",\"URY\",\"UZB\",\"VUT\",null,\"VNM\",\"VIR\",\"PSE\",null,\"ZMB\",\"ZWE\",\"BEL\",\"ALB\",\"AUT\",\"BLR\",\"BGR\",\"HRV\",\"CYP\",\"DNK\",\"EST\",\"CZE\",\"FIN\",\"DEU\",\"GRC\",\"FRA\",\"ISL\",\"HUN\",\"IRL\",\"ITA\",\"LVA\",\"LTU\",\"MLT\",\"MDA\",\"MNE\",\"NLD\",\"NOR\",\"PRT\",\"POL\",\"ROU\",\"RUS\",\"AFG\",\"DZA\",\"ASM\",\"AND\",\"AGO\",\"ATG\",\"ARG\",\"ARM\",\"ABW\",\"AUS\",\"AZE\",null,\"BHR\",\"BGD\",\"BRB\",\"BLZ\",\"BEN\",\"BMU\",\"BTN\",\"BOL\",\"BIH\",\"BWA\",\"BRA\",\"VGB\",\"BRN\",\"BFA\",\"BDI\",\"CPV\",\"KHM\",\"CMR\",\"CAN\",\"CYM\",\"CAF\",\"TCD\",\"CHI\",\"CHL\",\"CHN\",\"COL\",\"COM\",null,null,\"CRI\",\"CIV\",\"CUB\",\"CUW\",\"DJI\",\"DMA\",\"DOM\",\"ECU\",null,\"SLV\",\"GNQ\",\"ERI\",\"SWZ\",\"ETH\",\"FRO\",\"FJI\",\"PYF\",\"GAB\",null,\"GEO\",\"GHA\",\"GIB\",\"GRL\",\"GRD\",\"GUM\",\"GTM\",\"GIN\",\"GNB\",\"GUY\",\"HTI\",\"HND\",null,\"IND\",\"IDN\",null,\"IRQ\",\"IMN\",\"ISR\",\"JAM\",\"JPN\",\"JOR\",\"KAZ\",\"KEN\",\"KIR\",null,null,\"XKX\",\"KWT\",\"KGZ\",\"LAO\",\"LBN\",\"LSO\",\"LBR\",\"LBY\",\"LIE\",\"LUX\",null,\"MDG\",\"MWI\",\"MYS\",\"MDV\",\"MLI\",\"MHL\",\"MRT\",\"MUS\",\"MEX\",null,\"MCO\",\"MNG\",\"MAR\",\"MOZ\",\"MMR\",\"NAM\",\"NRU\",\"NPL\",\"NCL\",\"NZL\",\"NIC\",\"NER\",\"NGA\",\"MKD\",\"MNP\",\"OMN\",\"PAK\",\"PLW\",\"PAN\",\"PNG\",\"PRY\",\"PER\",\"PHL\",\"PRI\",\"QAT\",\"RWA\",\"WSM\",\"SMR\",\"STP\",\"SAU\",\"SEN\",\"SRB\",\"SYC\",\"SLE\",\"SGP\",\"SXM\",\"SVK\",\"SVN\",\"SLB\",\"SOM\",\"ZAF\",\"SSD\",\"ESP\",\"LKA\",\"KNA\",\"LCA\",\"MAF\",\"VCT\",\"SDN\",\"SUR\",\"SWE\",\"CHE\",\"SYR\",\"TJK\",\"TZA\",\"THA\",\"TLS\",\"TGO\",\"TON\",\"TTO\",\"TUN\",\"TUR\",\"TKM\",\"TCA\",\"TUV\",\"UGA\",\"UKR\",\"ARE\",\"GBR\",\"USA\",\"URY\",\"UZB\",\"VUT\",null,\"VNM\",\"VIR\",\"PSE\",null,\"ZMB\",\"ZWE\",\"BEL\",\"ALB\",\"AUT\",\"BLR\",\"BGR\",\"HRV\",\"CYP\",\"DNK\",\"EST\",\"CZE\",\"FIN\",\"DEU\",\"GRC\",\"FRA\",\"ISL\",\"HUN\",\"IRL\",\"ITA\",\"LVA\",\"LTU\",\"MLT\",\"MDA\",\"MNE\",\"NLD\",\"NOR\",\"PRT\",\"POL\",\"ROU\",\"RUS\",\"AFG\",\"DZA\",\"ASM\",\"AND\",\"AGO\",\"ATG\",\"ARG\",\"ARM\",\"ABW\",\"AUS\",\"AZE\",null,\"BHR\",\"BGD\",\"BRB\",\"BLZ\",\"BEN\",\"BMU\",\"BTN\",\"BOL\",\"BIH\",\"BWA\",\"BRA\",\"VGB\",\"BRN\",\"BFA\",\"BDI\",\"CPV\",\"KHM\",\"CMR\",\"CAN\",\"CYM\",\"CAF\",\"TCD\",\"CHI\",\"CHL\",\"CHN\",\"COL\",\"COM\",null,null,\"CRI\",\"CIV\",\"CUB\",\"CUW\",\"DJI\",\"DMA\",\"DOM\",\"ECU\",null,\"SLV\",\"GNQ\",\"ERI\",\"SWZ\",\"ETH\",\"FRO\",\"FJI\",\"PYF\",\"GAB\",null,\"GEO\",\"GHA\",\"GIB\",\"GRL\",\"GRD\",\"GUM\",\"GTM\",\"GIN\",\"GNB\",\"GUY\",\"HTI\",\"HND\",null,\"IND\",\"IDN\",null,\"IRQ\",\"IMN\",\"ISR\",\"JAM\",\"JPN\",\"JOR\",\"KAZ\",\"KEN\",\"KIR\",null,null,\"XKX\",\"KWT\",\"KGZ\",\"LAO\",\"LBN\",\"LSO\",\"LBR\",\"LBY\",\"LIE\",\"LUX\",null,\"MDG\",\"MWI\",\"MYS\",\"MDV\",\"MLI\",\"MHL\",\"MRT\",\"MUS\",\"MEX\",null,\"MCO\",\"MNG\",\"MAR\",\"MOZ\",\"MMR\",\"NAM\",\"NRU\",\"NPL\",\"NCL\",\"NZL\",\"NIC\",\"NER\",\"NGA\",\"MKD\",\"MNP\",\"OMN\",\"PAK\",\"PLW\",\"PAN\",\"PNG\",\"PRY\",\"PER\",\"PHL\",\"PRI\",\"QAT\",\"RWA\",\"WSM\",\"SMR\",\"STP\",\"SAU\",\"SEN\",\"SRB\",\"SYC\",\"SLE\",\"SGP\",\"SXM\",\"SVK\",\"SVN\",\"SLB\",\"SOM\",\"ZAF\",\"SSD\",\"ESP\",\"LKA\",\"KNA\",\"LCA\",\"MAF\",\"VCT\",\"SDN\",\"SUR\",\"SWE\",\"CHE\",\"SYR\",\"TJK\",\"TZA\",\"THA\",\"TLS\",\"TGO\",\"TON\",\"TTO\",\"TUN\",\"TUR\",\"TKM\",\"TCA\",\"TUV\",\"UGA\",\"UKR\",\"ARE\",\"GBR\",\"USA\",\"URY\",\"UZB\",\"VUT\",null,\"VNM\",\"VIR\",\"PSE\",null,\"ZMB\",\"ZWE\",\"BEL\",\"ALB\",\"AUT\",\"BLR\",\"BGR\",\"HRV\",\"CYP\",\"DNK\",\"EST\",\"CZE\",\"FIN\",\"DEU\",\"GRC\",\"FRA\",\"ISL\",\"HUN\",\"IRL\",\"ITA\",\"LVA\",\"LTU\",\"MLT\",\"MDA\",\"MNE\",\"NLD\",\"NOR\",\"PRT\",\"POL\",\"ROU\",\"RUS\",\"AFG\",\"DZA\",\"ASM\",\"AND\",\"AGO\",\"ATG\",\"ARG\",\"ARM\",\"ABW\",\"AUS\",\"AZE\",null,\"BHR\",\"BGD\",\"BRB\",\"BLZ\",\"BEN\",\"BMU\",\"BTN\",\"BOL\",\"BIH\",\"BWA\",\"BRA\",\"VGB\",\"BRN\",\"BFA\",\"BDI\",\"CPV\",\"KHM\",\"CMR\",\"CAN\",\"CYM\",\"CAF\",\"TCD\",\"CHI\",\"CHL\",\"CHN\",\"COL\",\"COM\",null,null,\"CRI\",\"CIV\",\"CUB\",\"CUW\",\"DJI\",\"DMA\",\"DOM\",\"ECU\",null,\"SLV\",\"GNQ\",\"ERI\",\"SWZ\",\"ETH\",\"FRO\",\"FJI\",\"PYF\",\"GAB\",null,\"GEO\",\"GHA\",\"GIB\",\"GRL\",\"GRD\",\"GUM\",\"GTM\",\"GIN\",\"GNB\",\"GUY\",\"HTI\",\"HND\",null,\"IND\",\"IDN\",null,\"IRQ\",\"IMN\",\"ISR\",\"JAM\",\"JPN\",\"JOR\",\"KAZ\",\"KEN\",\"KIR\",null,null,\"XKX\",\"KWT\",\"KGZ\",\"LAO\",\"LBN\",\"LSO\",\"LBR\",\"LBY\",\"LIE\",\"LUX\",null,\"MDG\",\"MWI\",\"MYS\",\"MDV\",\"MLI\",\"MHL\",\"MRT\",\"MUS\",\"MEX\",null,\"MCO\",\"MNG\",\"MAR\",\"MOZ\",\"MMR\",\"NAM\",\"NRU\",\"NPL\",\"NCL\",\"NZL\",\"NIC\",\"NER\",\"NGA\",\"MKD\",\"MNP\",\"OMN\",\"PAK\",\"PLW\",\"PAN\",\"PNG\",\"PRY\",\"PER\",\"PHL\",\"PRI\",\"QAT\",\"RWA\",\"WSM\",\"SMR\",\"STP\",\"SAU\",\"SEN\",\"SRB\",\"SYC\",\"SLE\",\"SGP\",\"SXM\",\"SVK\",\"SVN\",\"SLB\",\"SOM\",\"ZAF\",\"SSD\",\"ESP\",\"LKA\",\"KNA\",\"LCA\",\"MAF\",\"VCT\",\"SDN\",\"SUR\",\"SWE\",\"CHE\",\"SYR\",\"TJK\",\"TZA\",\"THA\",\"TLS\",\"TGO\",\"TON\",\"TTO\",\"TUN\",\"TUR\",\"TKM\",\"TCA\",\"TUV\",\"UGA\",\"UKR\",\"ARE\",\"GBR\",\"USA\",\"URY\",\"UZB\",\"VUT\",null,\"VNM\",\"VIR\",\"PSE\",null,\"ZMB\",\"ZWE\"],\"z\":[1.46796699090272,7.79321853789215,2.24336631500904,709.346032118606,62.0548336837993,3.95010395010403,2.61581787956337,2.0836084238285,28.7766137208514,8.99052361478446,0.791239406938448,1.70616052419454,8.93451415961518,1.79648142095595,1.65123150116651,28.3054683706654,2.52486728005296,5.23542258044299,24.975935531675,39.647629032829,4.42664550286656,29.8656104095718,null,1.92322003453521,2.46036778693723,4.22281614099486,27.951388563304,32.2424847257597,197.414268084251,null,29.7796264864999,null,null,2666.45059288538,null,null,175.951325534583,3.36139107320895,4.62776659959758,411.759641777268,2.70403475064702,10.2978117947205,1.87886279357232,2.8896158437215,14.4625482180894,null,9.48754836789363,10.1932067630746,null,10.512546081579,66.0070335542481,null,5.96664139499613,7.45884497828323,19.2632536382538,8.35152497972926,-0.798944337811886,9.06969071921507,2.14876033057852,null,19.1894039735098,9.23032599768658,null,8.23263034116112,16.7912251650917,20.8917930194849,null,23.1864981102567,14.2950690851945,null,null,null,1.31753745774971,12.5359594558963,22.8861330326945,10.0296564501018,19.8724349483472,null,12.2885912601426,10.0221733553239,null,2.16564721441536,null,9.64653104079614,162.717152150377,59.4615536991446,null,null,1.86882475298978,null,8.41141312270567,null,45.3653083621856,12.2105263157894,27.6081851727601,29.4645292281585,10.2248861637545,9.42032321644617,387.310847766638,null,9.9402588781945,19.9087488364168,-0.127899045020497,2.35312451301272,176.15529894237,1.55432816055007,null,null,2.68672756582486,null,19.5939189878584,null,9.27083333333323,null,7.2379849449913,null,1.86769424969108,49.0802100590784,83.3257747543458,3.45057509584896,5.48886133171505,13.4417696811973,null,6.5437906852417,6.02933188484532,34.9992712889592,null,0.0435161009571708,6.12358164775524,null,25.1947123972847,null,null,7.62296950698166,null,3.75494413677554,null,10.5632886691814,72.8355022972637,16.3735889723568,null,null,12.3435785170513,null,0.994206982933863,17.280932681459,13.4254143646407,11.1287029707088,6.83199610989531,null,2.9565217391303,null,-2.90352865746141,null,null,4.86843103056034,7.86400784570113,82.6605151864663,-0.243902439024446,null,1.72053384788524,null,9.84109579837757,13.4637296178669,9.6292197011623,null,8.6804442262446,null,4.67380337624704,7.6748487344981,2.95680025092623,5.62965921512373,null,1.73837289880567,68.3751929485423,235.558815073605,2.45514857818396,1.79982776867147,7.97995780590684,null,27.4277854195323,5.81818181818193,null,16.4335034524163,1.4600063035097,5.18220539517273,6.24415028747145,89.1133172248499,null,null,null,6.55014018970372,376.746174768209,null,2.69749518304432,2.80541968853655,42.2483197983755,null,2.22970130416486,null,null,null,34.9295874166667,null],\"type\":\"choropleth\"}],                        {\"template\":{\"data\":{\"histogram2dcontour\":[{\"type\":\"histogram2dcontour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"choropleth\":[{\"type\":\"choropleth\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"histogram2d\":[{\"type\":\"histogram2d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmap\":[{\"type\":\"heatmap\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmapgl\":[{\"type\":\"heatmapgl\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"contourcarpet\":[{\"type\":\"contourcarpet\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"contour\":[{\"type\":\"contour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"surface\":[{\"type\":\"surface\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"mesh3d\":[{\"type\":\"mesh3d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"scatter\":[{\"fillpattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2},\"type\":\"scatter\"}],\"parcoords\":[{\"type\":\"parcoords\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolargl\":[{\"type\":\"scatterpolargl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"bar\":[{\"error_x\":{\"color\":\"#2a3f5f\"},\"error_y\":{\"color\":\"#2a3f5f\"},\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"bar\"}],\"scattergeo\":[{\"type\":\"scattergeo\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolar\":[{\"type\":\"scatterpolar\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"histogram\":[{\"marker\":{\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"histogram\"}],\"scattergl\":[{\"type\":\"scattergl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatter3d\":[{\"type\":\"scatter3d\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattermapbox\":[{\"type\":\"scattermapbox\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterternary\":[{\"type\":\"scatterternary\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattercarpet\":[{\"type\":\"scattercarpet\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"carpet\":[{\"aaxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"baxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"type\":\"carpet\"}],\"table\":[{\"cells\":{\"fill\":{\"color\":\"#EBF0F8\"},\"line\":{\"color\":\"white\"}},\"header\":{\"fill\":{\"color\":\"#C8D4E3\"},\"line\":{\"color\":\"white\"}},\"type\":\"table\"}],\"barpolar\":[{\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"barpolar\"}],\"pie\":[{\"automargin\":true,\"type\":\"pie\"}]},\"layout\":{\"autotypenumbers\":\"strict\",\"colorway\":[\"#636efa\",\"#EF553B\",\"#00cc96\",\"#ab63fa\",\"#FFA15A\",\"#19d3f3\",\"#FF6692\",\"#B6E880\",\"#FF97FF\",\"#FECB52\"],\"font\":{\"color\":\"#2a3f5f\"},\"hovermode\":\"closest\",\"hoverlabel\":{\"align\":\"left\"},\"paper_bgcolor\":\"white\",\"plot_bgcolor\":\"#E5ECF6\",\"polar\":{\"bgcolor\":\"#E5ECF6\",\"angularaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"radialaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"ternary\":{\"bgcolor\":\"#E5ECF6\",\"aaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"baxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"caxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"coloraxis\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"colorscale\":{\"sequential\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"sequentialminus\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"diverging\":[[0,\"#8e0152\"],[0.1,\"#c51b7d\"],[0.2,\"#de77ae\"],[0.3,\"#f1b6da\"],[0.4,\"#fde0ef\"],[0.5,\"#f7f7f7\"],[0.6,\"#e6f5d0\"],[0.7,\"#b8e186\"],[0.8,\"#7fbc41\"],[0.9,\"#4d9221\"],[1,\"#276419\"]]},\"xaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"yaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"scene\":{\"xaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"yaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"zaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2}},\"shapedefaults\":{\"line\":{\"color\":\"#2a3f5f\"}},\"annotationdefaults\":{\"arrowcolor\":\"#2a3f5f\",\"arrowhead\":0,\"arrowwidth\":1},\"geo\":{\"bgcolor\":\"white\",\"landcolor\":\"#E5ECF6\",\"subunitcolor\":\"white\",\"showland\":true,\"showlakes\":true,\"lakecolor\":\"white\"},\"title\":{\"x\":0.05},\"mapbox\":{\"style\":\"light\"}}},\"geo\":{\"lataxis\":{\"showgrid\":true},\"lonaxis\":{\"showgrid\":true},\"visible\":false,\"resolution\":50,\"scope\":\"europe\",\"showcountries\":true,\"countrycolor\":\"Black\"},\"margin\":{\"r\":0,\"t\":0,\"l\":0,\"b\":0}},                        {\"responsive\": true}                    ).then(function(){\n",
+       "                            \n",
+       "var gd = document.getElementById('5a401e6f-bb17-4c50-8516-edc263762c6f');\n",
+       "var x = new MutationObserver(function (mutations, observer) {{\n",
+       "        var display = window.getComputedStyle(gd).display;\n",
+       "        if (!display || display === 'none') {{\n",
+       "            console.log([gd, 'removed!']);\n",
+       "            Plotly.purge(gd);\n",
+       "            observer.disconnect();\n",
+       "        }}\n",
+       "}});\n",
+       "\n",
+       "// Listen for the removal of the full notebook cells\n",
+       "var notebookContainer = gd.closest('#notebook-container');\n",
+       "if (notebookContainer) {{\n",
+       "    x.observe(notebookContainer, {childList: true});\n",
+       "}}\n",
+       "\n",
+       "// Listen for the clearing of the current output cell\n",
+       "var outputEl = gd.closest('.output');\n",
+       "if (outputEl) {{\n",
+       "    x.observe(outputEl, {childList: true});\n",
+       "}}\n",
+       "\n",
+       "                        })                };                });            </script>        </div>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "fig = go.Figure(data=go.Choropleth(locations=df['Country Code'],\n",
+    "                                    z = df['1995'].loc[df['Series Name']=='inflation']))\n",
+    "\n",
+    "fig.update_geos(\n",
+    "    visible=False, resolution=50, scope=\"europe\",\n",
+    "    \n",
+    "    showcountries=True, countrycolor=\"Black\",\n",
+    "    lataxis_showgrid=True, lonaxis_showgrid=True\n",
+    ")\n",
+    "fig.update_layout(margin={\"r\": 0, \"t\": 0, \"l\": 0, \"b\": 0})\n",
+    "fig.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Dash is running on http://127.0.0.1:8050/\n",
+      "\n",
+      " * Serving Flask app '__main__'\n",
+      " * Debug mode: on\n"
+     ]
+    }
+   ],
+   "source": [
+    "app = dash.Dash()\n",
+    "app.layout = html.Div([\n",
+    "    dcc.Graph(figure=fig)\n",
+    "])\n",
+    "\n",
+    "app.run_server(debug=True, use_reloader=False)  # Turn off reloader if inside Jupyter\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.4"
+  },
+  "orig_nbformat": 4
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
